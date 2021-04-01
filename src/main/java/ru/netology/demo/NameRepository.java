@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 
 
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import java.io.BufferedReader;
@@ -16,23 +18,24 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Repository
-public class Repository_For_Working_With_The_Database {
+public class NameRepository {
 
-    private final String productByName = read("select_by_alexey.sql");
+    private static final String productByName = read("select_by_alexey.sql");
 
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    @Autowired
-    public Repository_For_Working_With_The_Database(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+
+    public NameRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
 
-    public String getProductByName(String name) {
-        return namedParameterJdbcTemplate.queryForObject(productByName,
-                Map.of("name", name),
-                (rs, rowNum) -> (rs.getString("product_name")));
+    public  String getProductByName(String name) {
+        SqlParameterSource param = new MapSqlParameterSource("name", name);
+        return namedParameterJdbcTemplate.queryForObject(productByName, param,
+                String.class);
+//                (rs, rowNum) -> (rs.getString("product_name")));
     }
 
 

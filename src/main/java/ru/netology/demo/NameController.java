@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 
 @RestController
-public class Controller {
+public class NameController {
 
-    private final Repository_For_Working_With_The_Database repository;
+    private final NameRepository repository;
 
-    public Controller(Repository_For_Working_With_The_Database repository) {
+    public NameController(NameRepository repository) {
         this.repository = repository;
     }
 
